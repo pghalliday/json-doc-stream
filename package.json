@@ -1,0 +1,27 @@
+{
+  "name": "json-doc-stream",
+  "version": "1.0.0",
+  "description": "Parse streams of JSON documents",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pghalliday/json-doc-stream.git"
+  },
+  "keywords": [
+    "JSON",
+    "stream",
+    "document"
+  ],
+  "author": "Peter Halliday <pghalliday@gmail.com> (https://pghalliday.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pghalliday/json-doc-stream/issues"
+  },
+  "homepage": "https://github.com/pghalliday/json-doc-stream#readme",
+  "dependencies": {
+    "clarinet": "^0.12.0"
+  }
+}
