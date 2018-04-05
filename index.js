@@ -10,7 +10,7 @@ function type(value) {
   }
 }
 
-export default class JSONDocStream extends Writable {
+class JSONDocStream extends Writable {
   constructor(options) {
     super(options);
     let stack;
@@ -108,3 +108,5 @@ export default class JSONDocStream extends Writable {
     callback();
   }
 }
+
+module.exports = JSONDocStream;
