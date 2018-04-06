@@ -19,7 +19,8 @@ const stream = new JSONDocStream();
 
 stream.on('parsed', parsed => {
   // handle the parsed JSON document
-  // could be an array or object
+  // could be an object, array, string,
+  // number, boolean or null
 });
 
 stream.on('error', error => {
