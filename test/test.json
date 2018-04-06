@@ -1,0 +1,28 @@
+7.34675378456}
+undefined
+5645{
+  "test": "hello",
+  "more": [
+    "boo",
+    "banana",
+    {
+      "test": "apple",
+      "foo": "bar",
+      "blah": null
+    },
+    null,
+    {},
+    [
+      "s\u1234hdbajhsdb",
+      "khjsbdahjfbd"
+    ]
+  ]
+}{
+  "more": "data"}["array data"]
+7 -45 o
+15 true false
+{123}
+14null
+"hello"
+{}
+[]

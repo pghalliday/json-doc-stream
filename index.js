@@ -1,110 +1,43 @@
-const clarinet = require('clarinet');
+const Parser = require('jsonparse');
 const { Writable } = require('stream');
-
-function type(value) {
-  if (value instanceof Array) {
-    return 'array';
-  }
-  if (value instanceof Object) {
-    return 'object';
-  }
-}
 
 class JSONDocStream extends Writable {
   constructor(options) {
     super(options);
-    let stack;
-    let keyStack;
-    let current;
-    let currentKey;
-    const parser = clarinet.parser();
+    this._reset();
+  }
 
-    const reset = () => {
-      stack = [];
-      keyStack = [];
-      current = undefined;
-      currentKey = undefined;
-    };
-    reset();
+  _reset() {
+    if (this.parser) {
+      delete this.parser.onValue;
+      delete this.parser.onError;
+    }
+    this.parser = new Parser();
+    this.error = undefined;
 
-    const push = (next, key) => {
-      switch (type(current)) {
-        case 'array':
-          current.push(next);
-          break;
-        case 'object':
-          current[currentKey] = next;
-          break;
-        default:
-          current = next;
-          currentKey = key;
-          return;
-      }
-      stack.push(current);
-      keyStack.push(currentKey);
-      current = next;
-      currentKey = key;
+    this.parser.onError = error => {
+      this.error = error;
     };
 
-    const pop = () => {
-      const last = current;
-      current = stack.pop();
-      currentKey = keyStack.pop();
-      if (!current) {
-        this.emit('doc', last);
+    this.parser.onValue = value => {
+      if (this.parser.stack.length === 0) {
+        this.emit('parsed', value);
       }
     };
-
-    parser.onerror = error => {
-      this.emit('error', error);
-      reset();
-      parser.resume();
-    };
-
-    parser.onkey = key => {
-      currentKey = key;
-    };
-
-    parser.onvalue = value => {
-      switch (type(current)) {
-        case 'array':
-          current.push(value);
-          break;
-        case 'object':
-          current[currentKey] = value;
-          break;
-        default:
-          this.emit('doc', value);
-          break;
-      }
-    };
-
-    parser.onopenobject = key => {
-      push({}, key);
-    };
-
-    parser.oncloseobject = pop;
-
-    parser.onopenarray = () => {
-      push([]);
-    };
-
-    parser.onclosearray = pop;
-
-    parser.onend = () => {
-      this.emit('end');
-    };
-
-    this.parser = parser;
   }
 
   _write(chunk, encoding, callback) {
-    this.parser.write(chunk.toString('utf8'));
-    callback();
-  }
-
-  _final(callback) {
-    this.parser.close();
+    // Send the chunk one byte at a time and
+    // reset if we encounter an error
+    const length = chunk.length;
+    for (let i = 0; i < length; i++) {
+      const character = Buffer.alloc(1, chunk[i]);
+      this.parser.write(character);
+      if (this.error) {
+        this.emit('error', this.error);
+        this._reset();
+      }
+    }
     callback();
   }
 }

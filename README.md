@@ -2,7 +2,7 @@
 
 Parse streams of JSON documents.
 
-A simple wrapper for [clarinet](https://www.npmjs.com/package/clarinet) to efficiently parse a stream of multple JSON documents emitting events as each document completes containing the parsed data.
+A simple wrapper for [jsonparse](https://www.npmjs.com/package/jsonparse) to efficiently parse a stream of multple JSON documents emitting events as each document completes containing the parsed data.
 
 ## Install
 
@@ -17,17 +17,13 @@ const JSONDocStream = require('json-doc-stream');
 
 const stream = new JSONDocStream();
 
-stream.on('doc', doc => {
+stream.on('parsed', parsed => {
   // handle the parsed JSON document
-  // could be an array, object, number or null
+  // could be an array or object
 });
 
 stream.on('error', error => {
   // handle parse errors
-});
-
-stream.on('end', () => {
-  // if the stream is ended, wait for this event before trying to write more data
 });
 
 stream.write(JSONdata);

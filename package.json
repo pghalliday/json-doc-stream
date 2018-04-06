@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/pghalliday/json-doc-stream#readme",
   "dependencies": {
-    "clarinet": "^0.12.0"
+    "jsonparse": "^1.3.1"
   }
 }
