@@ -2,9 +2,6 @@ const fs = require('fs');
 const JSONDocStream = require('..');
 
 const stream = new JSONDocStream();
-stream.on('json', json => {
-  console.log('json:', json);
-});
 stream.on('parsed', parsed => {
   console.log('parsed:', parsed);
 });
